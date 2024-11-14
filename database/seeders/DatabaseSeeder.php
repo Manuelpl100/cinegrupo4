@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\sala;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\asientos;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +15,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+            for ($i=0; $i<2; $i++) {
+                sala::factory()->create([
+                    'nombre' => "sala",
+                ]);
+            }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+       for ($i=0; $i<10; $i++) {
+            for ($j=0; $j<7; $j++) {
+                asientos::factory()->create([
+                    'fila' => $i,
+                    'columna' => $j,
+                    'disponibilidad' => fake()->numberBetween(0,1),
+                ]);
+            }
     }
 }
+}
+

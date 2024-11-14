@@ -9,3 +9,6 @@ Route::get('/', function () {
 Route::get('/', function () {
     return view('cine');
 });
+Route::get('/', function () {
+    return view('cine2');
+});

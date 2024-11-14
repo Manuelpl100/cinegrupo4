@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
                     'fila' => $i,
                     'columna' => $j,
                     'disponibilidad' => fake()->numberBetween(0,1),
+                    'id_sala'=>Sala::inRandomOrder()->first()->id
                 ]);
             }
     }

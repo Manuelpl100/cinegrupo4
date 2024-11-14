@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('table_asientos', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();  // No es necesario usar ->primary() ya que Laravel ya lo hace automáticamente
             $table->string('fila');
             $table->string('columna');
             $table->string('disponibilidad');
+            $table->unsignedBigInteger('id_sala');
+            $table->foreign('id_sala')->references('id')->on('sala');
             $table->timestamps();
-
         });
     }
 

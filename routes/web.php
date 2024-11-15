@@ -6,9 +6,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/', function () {
+Route::get('/alberto', function () {
     return view('cine');
 });
-Route::get('/', function () {
+
+Route::get('/diego', function () {
     return view('cine2');
 });

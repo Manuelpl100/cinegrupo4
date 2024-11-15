@@ -19,11 +19,11 @@
   
   <div class="grid grid-cols-7 gap-2 mt-24 ml-6 mr-6">
     @for ($i = 0; $i < 70; $i++)
-  
-      @if ($i % 7 === 3)
-        <div class="bg-transparent"></div>
+      @if ($i % 7 === 3 )
+        <div  class="bg-transparent"></div>
       @else
-        <div class="bg-blue-400 rounded-full" id="Asiento">Disponible</div>
+      
+        <div id="a{{$i}}" class="bg-blue-400 rounded-full">{{$i}}</div>
         
       @endif
     @endfor

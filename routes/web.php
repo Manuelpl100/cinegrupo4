@@ -13,3 +13,4 @@ Route::get('/alberto', function () {
 Route::get('/diego', function () {
     return view('cine2');
 });
+

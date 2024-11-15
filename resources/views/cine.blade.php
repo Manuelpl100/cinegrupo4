@@ -11,11 +11,10 @@
  
   <div class="text-center mx-auto max-w-screen-lg">
     <h1 class="text-5xl font-extrabold mt-8">SPIDERMAN</h1>
-    <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('imagenes/spiderman.png') }}" alt="Spiderman">
+    <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('imagenes/spiderman.png') }}" alt="SPIDERMAN">
   </div>
 
   
-
   <div class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
     @for ($i = 0; $i < 77; $i++)
       @if ($i % 11 == 5) 
@@ -24,15 +23,6 @@
       <div class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer hover:bg-green-700">
        
         </div>
-
-  <div class="grid grid-cols-7 gap-2 mt-24 ml-6 mr-6">
-    @for ($i = 0; $i < 70; $i++)
-      @if ($i % 7 === 3 )
-        <div  class="bg-transparent"></div>
-      @else
-      
-        <div id="a{{$i}}" class="bg-blue-400 rounded-full">{{$i}}</div>
-        
       @endif
     @endfor
   </div>

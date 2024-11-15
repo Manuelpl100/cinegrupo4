@@ -6,9 +6,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/', function () {
+Route::get('/manuel', function () {
     return view('cine');
 });
-Route::get('/', function () {
+Route::get('/alejandro', function () {
     return view('cine2');
 });

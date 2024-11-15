@@ -21,16 +21,22 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
 
-       for ($i=0; $i<10; $i++) {
-            for ($j=0; $j<7; $j++) {
-                asientos::factory()->create([
-                    'fila' => $i,
-                    'columna' => $j,
-                    'disponibilidad' => fake()->numberBetween(0,1),
-                    'id_sala'=>Sala::inRandomOrder()->first()->id
-                ]);
+            $salas = Sala::all();
+
+            foreach ($salas as $sala) {
+                for ($i = 0; $i < 10; $i++) {
+                    for ($j = 0; $j < 7; $j++) {
+                        asientos::create([
+                            'fila' => $i,
+                            'columna' => $j,
+                            'disponibilidad' => fake()->numberBetween(0, 1),
+                            'id_sala' => $sala->id
+                        ]);
+                    }
+                }
             }
-    }
+
+
 }
 }
 

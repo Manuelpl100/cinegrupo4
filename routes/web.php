@@ -15,3 +15,11 @@ Route::get('/sala2', function () {
 Route::get('/cartelera', function () {
     return view('cartelera');
 });
+Route::get('/alberto', function () {
+    return view('cine');
+});
+
+Route::get('/diego', function () {
+    return view('cine2');
+});
+

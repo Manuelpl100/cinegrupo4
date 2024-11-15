@@ -14,7 +14,8 @@ class asientos extends Model
     protected $fillable =[
         'fila',
         'columna',
-        'disponibilidad'
+        'disponibilidad',
+        'id_sala'
     ];
 
 }

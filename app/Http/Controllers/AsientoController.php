@@ -18,7 +18,11 @@ class AsientoController extends Controller
         'id' => 'required|exists:table_asientos,id',
     ]);
     $asiento = asientos::find($request->id);
+
+    
     }
+
+
 
 
 }

@@ -17,7 +17,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mx-8 mt-12">
     
     <div class="bg-gray-900 rounded-lg shadow-lg overflow-hidden">
-      <img src="https://via.placeholder.com/400x600?text=Película+1" alt="Película 1" class="w-full h-80 object-cover">
+      <img src="h-72 w-auto mx-auto mt-6" src="{{ asset('imagenes/spiderman.cartelera.png') }}">
       <div class="p-4">
         <h2 class="text-2xl font-semibold">Spiderman</h2>
         

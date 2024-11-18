@@ -27,9 +27,10 @@
     @endfor
   </div>
 
-
+  
   <div class="mt-12 mx-auto max-w-lg">
-    <h2 class="text-2xl font-semibold mb-6">Reservar tu asiento</h2>
+    <h1 class="text-2xl  text-left font-semibold mb-3">Asientos disponibles :             / 70 </h1>
+  
     <div class="flex flex-col space-y-4">
       <div class="flex items-center">
         <label for="nombre" class="text-xl font-bold mr-4 w-28 text-right">Nombre</label>

@@ -29,20 +29,7 @@
 
   
   <div class="mt-12 mx-auto max-w-lg">
-    <h1 class="text-2xl  text-left font-semibold mb-3">Asientos disponibles :             / 70 </h1>
-  
-    <div class="flex flex-col space-y-4">
-      <div class="flex items-center">
-        <label for="nombre" class="text-xl font-bold mr-4 w-28 text-right">Nombre</label>
-        <input id="nombre" type="text" placeholder="Escribe aquí..."
-               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"/>
-      </div>
-      <div class="flex items-center">
-        <label for="correo" class="text-xl font-bold mr-4 w-28 text-right">Correo</label>
-        <input id="correo" type="text" placeholder="Escribe aquí..."
-               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"/>
-      </div>
-      <div class="flex items-center justify-center">
+    
         <button class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
           Reservar
         </button>

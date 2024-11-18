@@ -22,7 +22,7 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+
   <div class="text-center mx-auto max-w-screen-lg">
     <h1 class="text-2xl font-extrabold mt-8">BATMAN</h1>
     <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('imagenes/batman.png') }}" alt="BATMAN">

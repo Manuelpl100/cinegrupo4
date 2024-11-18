@@ -20,8 +20,8 @@
       @if ($i % 11 == 5) 
         <div class="bg-transparent"></div> 
       @else
-      <div class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer hover:bg-green-700">
-       
+      <div id="a{{$i}}" class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer hover:bg-green-700">
+        {{$i}}
         </div>
       @endif
     @endfor

@@ -1,25 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AsientoController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/sala1', function () {
-    return view('cine');
-});
-Route::get('/sala2', function () {
-    return view('cine2');
-});
+
+// Cartelera
 Route::get('/cartelera', function () {
     return view('cartelera');
 });
-Route::get('/alberto', function () {
-    return view('cine');
+
+// Salas de cine
+Route::get('/sala/{id}', function ($id) {
+    if ($id == 1) {
+        return view('cine');
+    } elseif ($id == 2) {
+        return view('cine2');
+    } else {
+        return redirect('/cartelera');
+    }
 });
 
-Route::get('/diego', function () {
-    return view('cine2');
-});
-
+//visualizaciones de los metodos de los controler de Diego
+Route::get('/asientos', [AsientoController::class, 'index']);
+Route::post('/asientos/reservar', [AsientoController::class, 'reservar']);
+Route::get('/asientos/aleatorio', [AsientoController::class, 'buscarAsientoDisponibleAleatorio']);
+Route::get('/asientos/ocupados', [AsientoController::class, 'contarAsientosOcupados']);

@@ -21,8 +21,8 @@
   </header>
 
   <div class="text-center mx-auto max-w-screen-lg">
-    <h1 class="text-2xl font-extrabold mt-8">Spiderman</h1>
-    <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('imagenes/spiderman.png') }}" alt="">
+    <h1 class="text-2xl font-extrabold mt-8">SPIDERMAN</h1>
+    <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('./imagenes/s.png') }}" alt="">
   </div>
 
   <div class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
@@ -30,7 +30,7 @@
       @if ($i % 11 == 5)
         <div class="col-span-1"></div> 
       @else
-        <div class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer hover:bg-green-700">
+        <div class="w-10 h-10 bg-black flex items-center justify-center rounded cursor-pointer hover:bg-red-900">
         </div>
       @endif
     @endfor

@@ -4,73 +4,74 @@ namespace App\Http\Controllers;
 
 use App\Models\asientos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AsientoController extends Controller
 {
-        public function index()
+    public function index(Request $request)
     {
-        return response()->json(asientos::all());
+        $id_sala = $request->id;
+
+        $asientos = asientos::where('id_sala', $id_sala)->get();
+
+        return response()->json([$id_sala => $asientos]);
     }
 
-    public function reservar(Request $request){
-        $id_asiento = $request->id;
-        $asiento = asientos::find($id_asiento);
+    public function reservar(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer|exists:asientos,id',
+            'id_asiento' => 'required|integer|exists:asientos,id',
+        ]);
 
-        if ($asiento == null){
-            $respuesta = array();
-            $respuesta['error']='No se encontro asiento';
-            return response()->json($respuesta);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 422);
         }
 
-        if ($asiento -> disponibilidad == false){
-            $respuesta = array();
-            $respuesta['error']='El asiento ya esta ocupado';
-            return response()->json($respuesta);
+        $id_sala = $request->route('id');
+        $id_asiento = $request->route('id_asiento');
+        $asiento = asientos::where('id', $id_asiento)->where('id_sala', $id_sala)->first();
+
+        if (!$asiento) {
+            return response()->json(['error' => 'No se encontró asiento en la sala especificada'], 404);
         }
 
-        $asiento->disponibilidad=false;
+        if (!$asiento->disponibilidad) {
+            return response()->json(['error' => 'El asiento ya está ocupado'], 422);
+        }
+
+        $asiento->disponibilidad = false;
         $asiento->save();
-        $respuesta=array();
-        $respuesta['mensaje']='Asiento reservado con éxito';
-        return response()->json($respuesta) ;
+
+        return response()->json(['mensaje' => 'Asiento reservado con éxito en la sala ' . $id_sala]);
     }
 
-    public function buscarAsientoDisponibleAleatorio(){
-        $asientosDispo = asientos::all();
-        $asientosLib= array();
+    public function buscarAsientoDisponibleAleatorio(Request $request)
+    {
+        $id_sala = $request->route('id');
+        $asientos = asientos::where('id_sala', $id_sala)->where('disponibilidad', true)->get();
 
-        foreach ($asientosDispo as $asiento){
-            if ($asiento -> disponibilidad == true){
-                array_push($asientosLib, $asiento);
-            }
+        if ($asientos->isEmpty()) {
+            return response()->json(['error' => 'No hay asientos disponibles en la sala ' . $id_sala], 404);
         }
 
-        if (count($asientosLib)==0){
-            $respuesta = array();
-            $respuesta['error'] = 'No hay asientos disponibles';
-            return response()->json($respuesta) ;
-        }
-        $Aleatorio=rand(0, count($asientosLib) - 1);
-        $asientaco=$asientosLib[$Aleatorio];
-        return response()->json ($asientaco);
+        $asientoAleatorio = $asientos->random();
+        $asientoAleatorio->id_sala = $id_sala;
 
-
-
-
-    }
-    public function contarAsientosOcupados(){
-        $todos=asientos::all();
-        $ocupados=0;
-
-        foreach($todos as $asiento){
-            if($asiento -> disponibilidad == false){
-                $ocupados=$ocupados+1;
-            }
-        }
-        $respuesta= array();
-        $respuesta['ocupados']=$ocupados;
-        return response()->json($respuesta) ;
+        return response()->json($asientoAleatorio);
     }
 
+    public function contarAsientosOcupados(Request $request)
+    {
+        $salas = asientos::select('id_sala')->distinct()->pluck('id_sala');
+        $respuesta = [];
 
+        foreach ($salas as $id_sala) {
+            $ocupados = asientos::where('id_sala', $id_sala)->where('disponibilidad', false)->count();
+            $respuesta[$id_sala] = $ocupados;
+        }
+
+        return response()->json($respuesta);
+    }
 }
+

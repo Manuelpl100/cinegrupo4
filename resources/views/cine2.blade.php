@@ -28,15 +28,14 @@
     <img class="h-72 w-auto mx-auto mt-6 rounded-3xl" src="{{ asset('imagenes/batman.png') }}" alt="BATMAN">
   </div>
 
-  <div class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
+  <div id="guardar" class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
     @for ($i = 0; $i < 77; $i++)
       @if ($i % 11 == 5)
-        <div class="col-span-1"></div> 
+        <div id="seleccion" class="col-span-1"></div> 
       @else
-        <div class="w-8 h-8 bg-black flex items-center justify-center rounded cursor-pointer hover:bg-red-900">
-          <img src="./asiento.png" alt="Asiento" class="w-full h-full object-contain">
-       
-        </div>
+        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-transparent">
+          <img src="{{ asset('./imagenes/asiento.png') }}" alt="Asiento" class="w-full h-full object-contain">
+        {{$i}}</div>
       @endif
     @endfor
   </div>

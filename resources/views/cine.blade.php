@@ -15,12 +15,12 @@
   </div>
 
   
-  <div class="grid grid-cols-11 gapmt--2 12 mx-auto max-w-2xl">
+  <div id="asientos" class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
     @for ($i = 0; $i < 77; $i++)
       @if ($i % 11 == 5) 
         <div class="bg-transparent"></div> 
       @else
-      <div id="a{{$i}}" class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer hover:bg-green-700">
+      <div id="a{{$i}}" class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer">
         {{$i}}
         </div>
       @endif
@@ -49,6 +49,9 @@
       </div>
     </div>
   </div>
+
+  <script src="{{ asset('js/cineprueba.js') }}"></script>  <!-- Incluir el archivo de JS -->
+
 
 </body>
 </html>

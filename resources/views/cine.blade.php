@@ -13,8 +13,8 @@
       <h1 class="text-xl font-bold text-white">Sala de Cine</h1>
       <nav>
         <ul class="flex space-x-4">
-          <li><a href="#home" class="text-gray-300 hover:text-white">Inicio</a></li>
-          <li><a href="#movies" class="text-gray-300 hover:text-white">Películas</a></li>
+          <li><a href="" class="text-gray-300 hover:text-white">Cartelera</a></li>
+
         </ul>
       </nav>
     </div>
@@ -22,16 +22,17 @@
 
   <div class="text-center mx-auto max-w-screen-lg">
     <h1 class="text-2xl font-extrabold mt-8">SPIDERMAN</h1>
-    <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('./imagenes/s.png') }}" alt="">
+    <img class="h-72 w-auto mx-auto mt-6 rounded-3xl" src="{{ asset('./imagenes/s.png') }}" alt="">
   </div>
 
-  <div class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
+  <div id="guardar" class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
     @for ($i = 0; $i < 77; $i++)
       @if ($i % 11 == 5)
-        <div class="col-span-1"></div> 
+        <div id="seleccion" class="col-span-1"></div> 
       @else
-        <div class="w-10 h-10 bg-black flex items-center justify-center rounded cursor-pointer hover:bg-red-900">
-        </div>
+        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-transparent">
+          <img src="{{ asset('./imagenes/asiento.png') }}" alt="Asiento" class="w-full h-full object-contain">
+        {{$i}}</div>
       @endif
     @endfor
   </div>
@@ -44,14 +45,36 @@
 
   <script src="{{ asset('js/cineprueba.js') }}"></script>  
 
-  <footer class="bg-gray-900 py-4 mt-12">
-    <div class="container mx-auto text-center">
-      <p class="text-gray-400 text-sm">Sala Campeones</p>
-      <div class="flex justify-center space-x-4 mt-2">
-        <a href="#" class="text-gray-400 hover:text-white">Facebook</a>
-        <a href="#" class="text-gray-400 hover:text-white">Twitter</a>
-        <a href="#" class="text-gray-400 hover:text-white">Instagram</a>
+  <footer class="bg-gray-900 py-8 text-white mt-10">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 ml-10">
+ 
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Cine Campeones</h2>
+        <p class="text-gray-400">El mejor cine para disfrutar de tus películas favoritas.</p>
+        <p class="mt-2 text-gray-400">Horario del cine: <span class="text-white">Lunes a Domingo: 10:00 AM - 11:00 PM</span></p>
       </div>
+
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Contacto</h2>
+        <p class="text-gray-400"> Teléfono: <span class="text-white">+34 666 66 66 </span></p>
+        <p class="text-gray-400"> Correo: <a href="mailto:info@cinecampeones.com" class="text-blue-400 hover:underline">info@cinecampeones.com</a></p>
+      </div>
+
+    
+      <div>
+       
+        <h2 class="text-2xl font-bold mb-4">Sobre Nosotros</h2>
+        <p><span>Alberto Mariscal</span></p>
+        <p><span>Alejandro Serrano</span></p>
+        <p><span>Diego Jurado</span></p>
+        <p><span>Manuel Perea</span></p>
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="border-t border-gray-700 mt-8 pt-4 text-center text-gray-500 text-sm">
+      Cine Campeones
     </div>
   </footer>
 

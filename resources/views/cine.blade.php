@@ -15,7 +15,7 @@
   </div>
 
   
-  <div class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
+  <div class="grid grid-cols-11 gapmt--2 12 mx-auto max-w-2xl">
     @for ($i = 0; $i < 77; $i++)
       @if ($i % 11 == 5) 
         <div class="bg-transparent"></div> 
@@ -27,9 +27,10 @@
     @endfor
   </div>
 
-
+  
   <div class="mt-12 mx-auto max-w-lg">
-    <h2 class="text-2xl font-semibold mb-6">Reservar tu asiento</h2>
+    <h1 class="text-2xl  text-left font-semibold mb-3">Asientos disponibles :             / 70 </h1>
+  
     <div class="flex flex-col space-y-4">
       <div class="flex items-center">
         <label for="nombre" class="text-xl font-bold mr-4 w-28 text-right">Nombre</label>

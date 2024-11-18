@@ -1,81 +1,64 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const asientosContainer = document.getElementById('asientos');
+    const asientosContainer = document.querySelector('.grid');
     const reservarButton = document.querySelector('button');
     let asientosData = [];
     let asientoSeleccionado = null;
 
-    const cargarAsientos = async () => {
-        try {
-            const response = await fetch('/asientos');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (!Array.isArray(data)) {
-                throw new Error('Los datos recibidos no son un array');
-            }
-            asientosData = data;
-            actualizarVistaAsientos();
-        } catch (error) {
-            console.error('Error al cargar los asientos:', error);
-            alert('Hubo un problema al cargar los asientos. Por favor, recarga la página y revisa la consola para más detalles.');
-        }
-    };
+    // Función para cargar los asientos
+    // const cargarAsientos = async () => {
+    //     try {
+    //         const response = await fetch('/asientos');
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status: ${response.status}`);
+    //         }
+    //         const data = await response.json();
+    //         if (Array.isArray(data)) {
+    //             asientosData = data;
+    //             actualizarVistaAsientos();
+    //         } else {
+    //             throw new Error('Formato de datos inesperado');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error al cargar los asientos:', error);
+    //         alert('Hubo un problema al cargar los asientos. Por favor, recarga la página.');
+    //     }
+    // };
 
+    // Función para actualizar la vista de los asientos
     const actualizarVistaAsientos = () => {
-        asientosData.forEach(asiento => {
-            const asientoElement = document.getElementById(`a${asiento.id}`);
-            if (asientoElement) {
-                asientoElement.classList.remove('bg-blue-500', 'bg-red-500');
-                asientoElement.classList.add(asiento.disponibilidad ? 'bg-blue-500' : 'bg-red-500');
+        if (!asientosContainer) {
+            console.error('El contenedor de asientos no se encontró');
+            return;
+        }
+        const asientosElements = asientosContainer.querySelectorAll('div:not(.col-span-1)');
+        asientosElements.forEach((asientoElement, index) => {
+            const asiento = asientosData[index];
+            if (asiento) {
+                asientoElement.classList.toggle('bg-red-500', !asiento.disponibilidad);
+                asientoElement.classList.toggle('bg-black', asiento.disponibilidad);
                 asientoElement.classList.toggle('cursor-not-allowed', !asiento.disponibilidad);
+                asientoElement.classList.toggle('hover:bg-red-900', asiento.disponibilidad);
             }
         });
     };
 
-    const actualizarEstadoBotonReserva = () => {
-        reservarButton.disabled = !asientoSeleccionado;
-        reservarButton.classList.toggle('opacity-50', !asientoSeleccionado);
-        reservarButton.classList.toggle('cursor-not-allowed', !asientoSeleccionado);
-    };
-
-    const seleccionarAsiento = (event) => {
-        const asientoElement = event.target.closest('[id^="a"]');
-        if (!asientoElement) return;
-
-        const asientoId = parseInt(asientoElement.id.slice(1));
-        const asiento = asientosData.find(a => a.id === asientoId);
-
-        if (asiento && asiento.disponibilidad) {
-            if (asientoSeleccionado) {
-                asientoSeleccionado.classList.remove('ring-2', 'ring-yellow-500');
-            }
-            if (asientoSeleccionado === asientoElement) {
-                asientoSeleccionado = null;
-            } else {
-                asientoElement.classList.add('ring-2', 'ring-yellow-500');
-                asientoSeleccionado = asientoElement;
-            }
-            actualizarEstadoBotonReserva();
-        }
-    };
-
+    // Función para reservar un asiento
     const reservarAsiento = async () => {
         if (!asientoSeleccionado) {
             alert('Por favor, selecciona un asiento primero.');
             return;
         }
 
-        const asientoId = parseInt(asientoSeleccionado.id.slice(1));
+        const index = Array.from(asientosContainer.children).indexOf(asientoSeleccionado);
+        const asiento = asientosData[index];
 
         try {
             const response = await fetch('/asientos/reservar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ id: asientoId })
+                body: JSON.stringify({ id: asiento.id })
             });
 
             if (!response.ok) {
@@ -87,9 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.mensaje) {
                 alert(result.mensaje);
                 await cargarAsientos();
-                asientoSeleccionado.classList.remove('ring-2', 'ring-yellow-500');
                 asientoSeleccionado = null;
-                actualizarEstadoBotonReserva();
             } else if (result.error) {
                 alert(result.error);
             }
@@ -99,9 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    asientosContainer.addEventListener('click', seleccionarAsiento);
-    reservarButton.addEventListener('click', reservarAsiento);
+    // Función para seleccionar un asiento y guardar el elemento seleccionado
+    const seleccionarAsiento = (event) => {
+        const asientoElement = event.target.closest('div:not(.col-span-1)');
+        if (!asientoElement) return;
 
+        if (asientoSeleccionado) {
+            asientoSeleccionado.classList.remove('ring-2', 'ring-yellow-500');
+        }
+        asientoElement.classList.add('ring-2', 'ring-yellow-500');
+        asientoSeleccionado = asientoElement;
+    };
+
+    // Verificar si los elementos existen antes de agregar event listeners
+    if (asientosContainer) {
+        asientosContainer.addEventListener('click', seleccionarAsiento);
+    } else {
+        console.error('El contenedor de asientos no se encontró en el DOM');
+    }
+
+    if (reservarButton) {
+        reservarButton.addEventListener('click', reservarAsiento);
+    } else {
+        console.error('El botón de reserva no se encontró en el DOM');
+    }
+
+    // Cargar asientos al iniciar
     cargarAsientos();
-    actualizarEstadoBotonReserva();
 });

@@ -3,29 +3,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const reservarButton = document.querySelector('button');
     let asientosData = [];
     let asientoSeleccionado = null;
+    let salaId = null;
 
-    // Función para cargar los asientos
-    // const cargarAsientos = async () => {
-    //     try {
-    //         const response = await fetch('/asientos');
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status: ${response.status}`);
-    //         }
-    //         const data = await response.json();
-    //         if (Array.isArray(data)) {
-    //             asientosData = data;
-    //             actualizarVistaAsientos();
-    //         } else {
-    //             throw new Error('Formato de datos inesperado');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error al cargar los asientos:', error);
-    //         alert('Hubo un problema al cargar los asientos. Por favor, recarga la página.');
-    //     }
-    // };
+    // Función para cargar los asientos de una sala
+    const cargarAsientos = async (salaId) => {
+        if (!salaId) {
+            console.error('No se especificó la sala para cargar los asientos');
+            return;
+        }
+        try {
+            const response = await fetch(`/asientos/sala/${salaId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                asientosData = data;
+                actualizarVistaAsientos();
+            } else {
+                throw new Error('Formato de datos inesperado');
+            }
+        } catch (error) {
+            console.error('Error al cargar los asientos:', error);
+            alert('Hubo un problema al cargar los asientos. Por favor, recarga la página.');
+        }
+    };
 
-    // Función para actualizar la vista de los asientos
-    const actualizarVistaAsientos = () => {
+    // Función para actualizar la vista de los asientos.
+    const actualizarVistaAsientos = (asientosContainer) => {
         if (!asientosContainer) {
             console.error('El contenedor de asientos no se encontró');
             return;
@@ -34,9 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
         asientosElements.forEach((asientoElement, index) => {
             const asiento = asientosData[index];
             if (asiento) {
+                // Si el asiento no está disponible, colorea el elemento de rojo y cambia el cursor a prohibido.
+                // Si el asiento está disponible, colorea el elemento de negro y permite el cursor de puntero.
                 asientoElement.classList.toggle('bg-red-500', !asiento.disponibilidad);
                 asientoElement.classList.toggle('bg-black', asiento.disponibilidad);
                 asientoElement.classList.toggle('cursor-not-allowed', !asiento.disponibilidad);
+                // Si el asiento está disponible, colorea el elemento de rojo oscuro al pasar el cursor por encima.
                 asientoElement.classList.toggle('hover:bg-red-900', asiento.disponibilidad);
             }
         });
@@ -50,10 +58,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const index = Array.from(asientosContainer.children).indexOf(asientoSeleccionado);
+        
+        if (index === -1) {
+            console.error('El asiento seleccionado no se encuentra en el contenedor de asientos.');
+            alert('El asiento seleccionado no es válido. Por favor, selecciona un asiento disponible.');
+            return;
+        }
+
         const asiento = asientosData[index];
 
         try {
-            const response = await fetch('/asientos/reservar', {
+            const response = await fetch(`/asientos/reservar/sala/${salaId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (result.mensaje) {
                 alert(result.mensaje);
-                await cargarAsientos();
+                await cargarAsientos(salaId);
                 asientoSeleccionado = null;
             } else if (result.error) {
                 alert(result.error);
@@ -79,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Hubo un error al intentar reservar el asiento. Por favor, inténtalo de nuevo.');
         }
     };
+
 
     // Función para seleccionar un asiento y guardar el elemento seleccionado
     const seleccionarAsiento = (event) => {
@@ -106,5 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Cargar asientos al iniciar
-    cargarAsientos();
+    const salaSelect = document.querySelector('select[name="sala"]');
+    if (salaSelect) {
+        salaId = salaSelect.value;
+        cargarAsientos(salaId);
+        salaSelect.addEventListener('change', (event) => {
+            salaId = event.target.value;
+            cargarAsientos(salaId);
+        });
+    } else {
+        console.error('No se encontró el select de salas en el DOM');
+    }
 });
+

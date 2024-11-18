@@ -9,7 +9,7 @@ class AsientoController extends Controller
 {
         public function index()
     {
-        return asientos::all();
+        return response()->json(asientos::all());
     }
 
     public function reservar(Request $request){
@@ -19,20 +19,20 @@ class AsientoController extends Controller
         if ($asiento == null){
             $respuesta = array();
             $respuesta['error']='No se encontro asiento';
-            return $respuesta;
+            return response()->json($respuesta);
         }
 
         if ($asiento -> disponibilidad == false){
             $respuesta = array();
             $respuesta['error']='El asiento ya esta ocupado';
-            return $respuesta;
+            return response()->json($respuesta);
         }
 
         $asiento->disponibilidad=false;
         $asiento->save();
         $respuesta=array();
         $respuesta['mensaje']='Asiento reservado con éxito';
-        return $respuesta;
+        return response()->json($respuesta) ;
     }
 
     public function buscarAsientoDisponibleAleatorio(){
@@ -48,11 +48,11 @@ class AsientoController extends Controller
         if (count($asientosLib)==0){
             $respuesta = array();
             $respuesta['error'] = 'No hay asientos disponibles';
-            return $respuesta;
+            return response()->json($respuesta) ;
         }
         $Aleatorio=rand(0, count($asientosLib) - 1);
         $asientaco=$asientosLib[$Aleatorio];
-        return $asientaco;
+        return response()->json ($asientaco);
 
 
 
@@ -69,7 +69,7 @@ class AsientoController extends Controller
         }
         $respuesta= array();
         $respuesta['ocupados']=$ocupados;
-        return $respuesta;
+        return response()->json($respuesta) ;
     }
 
 

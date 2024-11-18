@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
             for ($i=0; $i<2; $i++) {
                 sala::factory()->create([
-                    'nombre' => "sala",
+                    'nombre' => 'sala' . (Sala::count() + 1)
                 ]);
             }
 

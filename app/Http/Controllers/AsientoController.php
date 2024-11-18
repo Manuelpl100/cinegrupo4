@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\asientos;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class AsientoController extends Controller
 {

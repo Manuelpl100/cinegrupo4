@@ -7,48 +7,58 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="text-center bg-gray-800 text-white bg-cover bg-center" style="background-image: url('/imagenes/fondo1.png');">
-  
- 
-  <div class="text-center mx-auto max-w-screen-lg">
-    <h1 class="text-5xl font-extrabold mt-8">SPIDERMAN</h1>
-    <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('imagenes/spiderman.png') }}" alt="SPIDERMAN">
-  </div>
 
   
-  <div class="grid grid-cols-11 gapmt--2 12 mx-auto max-w-2xl">
+  <header class="bg-gray-900 py-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center px-6">
+      <h1 class="text-xl font-bold text-white">Sala de Cine</h1>
+      <nav>
+        <ul class="flex space-x-4">
+          <li><a href="#home" class="text-gray-300 hover:text-white">Inicio</a></li>
+          <li><a href="#movies" class="text-gray-300 hover:text-white">Películas</a></li>
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+  <div class="text-center mx-auto max-w-screen-lg">
+    <h1 class="text-2xl font-extrabold mt-8">BATMAN</h1>
+    <img class="h-72 w-auto mx-auto mt-6" src="{{ asset('imagenes/spiderman.png') }}" alt="spiderman">
+  </div>
+
+  <div class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
     @for ($i = 0; $i < 77; $i++)
-      @if ($i % 11 == 5) 
-        <div class="bg-transparent"></div> 
+      @if ($i % 11 == 5)
+        <div class="col-span-1"></div> 
       @else
-      <div id="a{{$i}}" class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer hover:bg-green-700">
-        {{$i}}
+        <div class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded cursor-pointer hover:bg-green-700">
+       
         </div>
       @endif
     @endfor
   </div>
+  
+  
 
-  
   <div class="mt-12 mx-auto max-w-lg">
-    <h1 class="text-2xl  text-left font-semibold mb-3">Asientos disponibles :             / 70 </h1>
-  
-    <div class="flex flex-col space-y-4">
-      <div class="flex items-center">
-        <label for="nombre" class="text-xl font-bold mr-4 w-28 text-right">Nombre</label>
-        <input id="nombre" type="text" placeholder="Escribe aquí..."
-               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"/>
-      </div>
-      <div class="flex items-center">
-        <label for="correo" class="text-xl font-bold mr-4 w-28 text-right">Correo</label>
-        <input id="correo" type="text" placeholder="Escribe aquí..."
-               class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"/>
-      </div>
-      <div class="flex items-center justify-center">
-        <button class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-          Reservar
-        </button>
+    <button class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+      Reservar
+    </button>
+  </div>
+  <script src="{{ asset('js/cineprueba.js') }}"></script>  
+
+  <footer class="bg-gray-900 py-4 mt-12">
+    <div class="container mx-auto text-center">
+      <p class="text-gray-400 text-sm"> Sala Campeones</p>
+      <div class="flex justify-center space-x-4 mt-2">
+        <a href="#" class="text-gray-400 hover:text-white">Facebook</a>
+        <a href="#" class="text-gray-400 hover:text-white">Twitter</a>
+        <a href="#" class="text-gray-400 hover:text-white">Instagram</a>
       </div>
     </div>
-  </div>
+  </footer>
 
 </body>
 </html>

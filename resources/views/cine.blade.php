@@ -56,6 +56,7 @@
 
   <script src="{{ asset('js/cineprueba.js') }}"></script>
 
+
   <footer class="bg-gray-900 py-8 text-white mt-10">
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 ml-10">
       <div>

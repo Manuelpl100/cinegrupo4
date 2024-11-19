@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const eliminarButton = document.querySelector('#eliminar');
 
     // Función para reservar los asientos seleccionados
+
     const reservarAsientos = async () => {
         const asientosSeleccionados = Array.from(asientosContainer.children)
             .filter(child => child.classList.contains('ring-8'));
@@ -12,23 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Por favor, selecciona al menos un asiento.');
             return;
         }
-        if (asientosSeleccionados.length > 10) {
-            const cantidadMaxima = 10;
-            const asientosParaQuitar = asientosSeleccionados.length - cantidadMaxima;
-            asientosSeleccionados.slice(-asientosParaQuitar).forEach(asiento => asiento.classList.remove('ring-8', 'ring-yellow-500'));
-            alert(`Solo puedes seleccionar hasta ${cantidadMaxima} asientos a la vez.`);
-            return;
-        }
 
         const ids = asientosSeleccionados.map(asiento => parseInt(asiento.textContent.trim()));
 
         try {
-            const response = await fetch('/asientos/reservar', {
+            const response = await fetch(`/api/1/asientos/reservar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ids })
+                body: JSON.stringify({ id: ids }),
             });
 
             const result = await response.json();
@@ -43,8 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(result.error);
             }
         } catch (error) {
-            console.error('Error al reservar los asientos:', error);
-            alert('Hubo un problema al realizar la reserva.');
+            if (error.response && error.response.status === 422) {
+                const errors = error.response.data.errors;
+                const errorMessage = Object.values(errors).flat().join('\n');
+                alert(errorMessage);
+            } else {
+                console.error('Error al reservar los asientos:', error);
+                alert('Hubo un problema al realizar la reserva.');
+            }
         }
     };
 
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     asientosContainer.addEventListener('click', (e) => {
         const asientoElement = e.target.closest('div');
         if (!asientoElement || asientoElement.classList.contains('col-span-1')) return;
-        
+
         const img = asientoElement.querySelector('img');
         if (!img || img.src.includes('asientoocupado.png')) return;
 

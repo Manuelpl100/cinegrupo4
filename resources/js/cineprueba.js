@@ -2,7 +2,7 @@
 // Se ejecuta cuando se carga la pagina.
 document.addEventListener('DOMContentLoaded', () => {
     // El contenedor de los asientos
-    const asientosContainer = document.querySelector('#guardar');
+    const asientosContainer = document.querySelector('.space-y-4');
     // El boton para reservar los asientos
     const reservarButton = document.querySelector('#reservar');
     // El boton para crear un nuevo asiento
@@ -11,68 +11,71 @@ document.addEventListener('DOMContentLoaded', () => {
     const salaId = 1;
 
     // Funcion para reservar los asientos seleccionados
-    const reservarAsientos = async () => {
-        // Obtenemos todos los asientos seleccionados
-    const asientosSeleccionados = document.querySelector('#guardar');
+    const reservarAsientos = async (asientoSeleccionado) => {
+        if (!asientoSeleccionado || !(asientoSeleccionado instanceof HTMLElement) || !asientoSeleccionado.classList.contains('ring-8')) {
+            alert('Por favor, selecciona un asiento válido para reservar.');
+            return;
+        }
 
-    if (asientosSeleccionados.length === 0) {
-        alert('Por favor, selecciona al menos un asiento para reservar.');
-        return;
-    }
+        try {
+            // Obtenemos el ID del asiento seleccionado
+            const imgElement = asientoSeleccionado.querySelector('img');
+            if (!imgElement) {
+                alert('Error: No se pudo encontrar la imagen del asiento.');
+                return;
+            }
 
-    try {
-            const asientoId = asientosSeleccionados.getAttribute('data-id');
-            console.log("sellega1");
-            console.log("Requesting URL:", `/asientos/reservar/${asientoId}`);
+            const asientoId = imgElement.getAttribute('alt');
 
             // Hacemos la petición para reservar el asiento
-            const response = await fetch(`/asientos/reservar/${asientoId}`, {
-                method: 'GET',
-            }).catch(error => {
-                console.error("Fetch error:", error);
-                throw error;
+            const response = await fetch(`/api/reservar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ id_asientos: [parseInt(asientoId)] }),
             });
 
-            console.log("sellega2");
-            console.log(asientoId);
-            console.log("Response status:", response.status);
-            console.log("Response OK:", response.ok);
-
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error en la reserva');
             }
-            console.log("sellega3")
+
             const result = await response.json();
 
             if (result.mensaje === 'Asiento reservado con exito') {
                 // Actualizamos la UI para mostrar el asiento como ocupado
-                const img = asiento.querySelector('img');
-                console.log("sellega4")
-                if (img) {
-                    img.src = './imagenes/asientoocupado.png';
-                    console.log("sellega5")
-                }
-                // Removemos las clases de selección
-                asiento.classList.remove('ring-8', 'ring-yellow-500');
+                imgElement.src = './imagenes/asientoocupado.png';
+                // Cambiamos el color del asiento a rojo
+                asientoSeleccionado.classList.remove('ring-8', 'ring-yellow-500');
+                asientoSeleccionado.classList.add('ring-red-500');
+                alert('Asiento reservado con éxito!');
             } else {
                 console.error('Error al reservar asiento:', result.error);
             }
 
-
-        alert('Asientos reservados con éxito!');
-        // Opcionalmente, podrías llamar a recargarAsientos() aquí si quieres actualizar toda la sala
-    } catch (error) {
-        console.error('Error al reservar los asientos:', error);
-        alert('Hubo un problema al reservar los asientos. Por favor, inténtalo de nuevo.');
-    }
+        } catch (error) {
+            console.error('Error al reservar el asiento:', error);
+            alert('Hubo un problema al reservar el asiento. Por favor, inténtalo de nuevo.');
+        }
     };
+
+    // Evento para cuando se clickea un asiento y se presiona el botón de reservar
+    asientosContainer.addEventListener('click', (e) => {
+        const asientoSeleccionado = e.target.closest('.ring-8');
+        reservarButton.addEventListener('click', () => {
+            reservarAsientos(asientoSeleccionado);
+        });
+    });
 
     // Evento para cuando se selecciona un asiento
     asientosContainer.addEventListener('click', (e) => {
         // Obtenemos el elemento que se clickeo
         const asientoElement = e.target.closest('div');
+
         // Verificamos si se clickeo un asiento y no un espacio vacio
-        if (!asientoElement || asientoElement.classList.contains('col-span-1')) return;
+        if (!asientoElement || asientoElement.classList.contains('space-y-4')) return;
 
         // Obtenemos la imagen del asiento
         const img = asientoElement.querySelector('img');
@@ -88,3 +91,4 @@ document.addEventListener('DOMContentLoaded', () => {
     reservarButton.addEventListener('click', reservarAsientos);
 
 });
+

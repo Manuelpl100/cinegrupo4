@@ -16,21 +16,19 @@ class AsientoController extends Controller
         return response()->json(['asientos' => $asientos]);
     }
 
-    public function reservar(Request $request, $id_sala, $id_asiento)
+    public function reservar($id_asiento)
     {
-        $asiento = asientos::select('id', 'disponibilidad')
-            ->where('id_sala', $id_sala)
-            ->where('id', $id_asiento)
-            ->first();
+        $asiento = asientos::find($id_asiento);
 
         if (!$asiento) {
-            return response()->json(['error' => 'Asiento no encontrado'], 404);
+            return response()->json(['error' => 'Asiento no encontrado',
+        'error_message' => 'melarepanflinfla'], 200);
         }
 
         $asiento->disponibilidad = false;
         $asiento->save();
 
-        return response()->json(['mensaje' => 'Asiento reservado con éxito']);
+        return response()->json(['mensaje' => 'Asiento reservado con exito']);
     }
 
 
@@ -56,6 +54,24 @@ class AsientoController extends Controller
 
         return response()->json(['ocupados' => $ocupados]);
     }
+
+
+    public function mostrarAsientos($id_sala)
+    {
+        $asientos = asientos::where('id_sala', $id_sala)->get();
+
+        if ($asientos->count() == 0) {
+            return response()->json(['error' => 'No existen asientos para esa sala'], 404);
+        }
+
+        $resultado = $asientos->map(function ($asiento) {
+            return [
+                'id' => $asiento->id,
+                'imagen' => $asiento->disponibilidad ? 'asientodisponible.png' : 'asientoocupado.png',
+            ];
+        });
+
+        return response()->json(['asientos' => $resultado]);
+    }
+
 }
-
-

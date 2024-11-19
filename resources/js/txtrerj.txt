@@ -1,0 +1,43 @@
+const asientosSeleccionados = Array.from(asientosContainer.children)
+            .filter(child => child.classList.contains('ring-8'));
+
+        if (asientosSeleccionados.length < 1) {
+            alert('Por favor, selecciona al menos un asiento.');
+            return;
+        }
+
+        const id_asientos = asientosSeleccionados.map(asiento =>
+            parseInt(asiento.textContent.trim()));
+
+        try {
+            // Debes cambiar la ruta de la API para que coincida con la ruta que se encuentra en tu archivo de rutas
+            const response = await fetch(`/api/reservar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ id_asientos }),
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    alert('La ruta para reservar asientos no se encontró. Revisa tu configuración en web.php o api.php.');
+                    return;
+                }
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error en la reserva');
+            }
+
+            alert('Asientos reservados con éxito');
+            asientosSeleccionados.forEach(asiento => {
+                asiento.classList.remove('ring-8', 'ring-red-500');
+            });
+        } catch (error) {
+            console.error('Error al reservar los asientos:', error);
+            if (error instanceof SyntaxError) {
+                alert('Error en la respuesta del servidor. Asegúrate de que la respuesta sea JSON válido.');
+            } else {
+                alert(error.message || 'Hubo un problema al realizar la reserva.');
+            }
+        }

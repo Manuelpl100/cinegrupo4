@@ -8,96 +8,63 @@ document.addEventListener('DOMContentLoaded', () => {
     // El boton para crear un nuevo asiento
     const crearButton = document.querySelector('#crear');
     // La identificacion de la sala en la que nos encontramos
-    const salaId = 1; 
-
-    // Funcion para recargar los asientos
-    // const recargarAsientos = async () => {
-    //     try {
-    //         // Hacemos una peticion HTTP para obtener los asientos de la sala
-    //         const response = await fetch(`/api/salas/${salaId}/asientos`);
-    //         // Si no hay asientos, no hacemos nada
-    //         if (response.status === 404) return;
-    //         // Verificamos si hubo un error en la peticion
-    //         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    //         // Convertimos la respuesta a un objeto JSON
-    //         const data = await response.json();
-
-    //         // Recorremos los asientos y actualizamos su imagen dependiendo de si estan disponibles o no
-    //         data.asientos.forEach((asiento) => {
-    //             // Obtenemos el elemento HTML del asiento
-    //             const asientoElement = document.querySelector(`#guardar div:nth-child(${asiento.id})`);
-    //             if (asientoElement) {
-    //                 // Obtenemos la imagen del asiento
-    //                 const img = asientoElement.querySelector('img');
-    //                 // Verificamos si la imagen es una imagen de asiento disponible
-    //                 if (img) {
-    //                     // Actualizamos la imagen del asiento
-    //                     img.src = asiento.disponibilidad ? 
-    //                         './imagenes/asientodisponible.png' : 
-    //                         './imagenes/asientoocupado.png';
-    //                 }
-    //             }
-    //         });
-    //     } catch (error) {
-    //         console.error('Error al recargar los asientos:', error);
-    //         alert('Hubo un problema al cargar los asientos. Por favor, recarga la p gina.');
-    //     }
-    // };
+    const salaId = 1;
 
     // Funcion para reservar los asientos seleccionados
     const reservarAsientos = async () => {
-        // Obtenemos los asientos seleccionados por el usuario
-        const asientosSeleccionados = Array.from(asientosContainer.children)
-            .filter(child => child.classList.contains('ring-8'));
+        // Obtenemos todos los asientos seleccionados
+    const asientosSeleccionados = document.querySelector('#guardar');
 
-        // Verificamos si se seleccionaron asientos
-        if (asientosSeleccionados.length < 1) {
-            alert('Por favor, selecciona al menos un asiento.');
-            return;
-        }
-        // Verificamos si se seleccionaron mas de 10 asientos
-        if (asientosSeleccionados.length > 10) {
-            alert('No puedes seleccionar más de 10 asientos.');
-            asientosSeleccionados.slice(10).forEach(asiento => {
-                asiento.classList.remove('ring-8', 'ring-red-500');
+    if (asientosSeleccionados.length === 0) {
+        alert('Por favor, selecciona al menos un asiento para reservar.');
+        return;
+    }
+
+    try {
+            const asientoId = asientosSeleccionados.getAttribute('data-id');
+            console.log("sellega1");
+            console.log("Requesting URL:", `/asientos/reservar/${asientoId}`);
+
+            // Hacemos la petición para reservar el asiento
+            const response = await fetch(`/asientos/reservar/${asientoId}`, {
+                method: 'GET',
+            }).catch(error => {
+                console.error("Fetch error:", error);
+                throw error;
             });
-            return;
-        }
 
-        // Obtenemos los IDs de los asientos seleccionados
-        const id_asientos = asientosSeleccionados.map(asiento => 
-            parseInt(asiento.textContent.trim()));
+            console.log("sellega2");
+            console.log(asientoId);
+            console.log("Response status:", response.status);
+            console.log("Response OK:", response.ok);
 
-        try {
-            // Iteramos sobre cada asiento para reservarlos individualmente
-            for (const id_asiento of id_asientos) {
-                // Hacemos una peticion HTTP para reservar cada asiento
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log("sellega3")
+            const result = await response.json();
 
-                const response = await fetch(`/sala/{salaId}/asientos/reservar/{asiento}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    }
-                });
-
-                // Verificamos si hubo un error en la peticion
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Error en la reserva');
+            if (result.mensaje === 'Asiento reservado con exito') {
+                // Actualizamos la UI para mostrar el asiento como ocupado
+                const img = asiento.querySelector('img');
+                console.log("sellega4")
+                if (img) {
+                    img.src = './imagenes/asientoocupado.png';
+                    console.log("sellega5")
                 }
+                // Removemos las clases de selección
+                asiento.classList.remove('ring-8', 'ring-yellow-500');
+            } else {
+                console.error('Error al reservar asiento:', result.error);
             }
 
-            alert('Asientos reservados con éxito');
-            // Recargamos los asientos y quitamos la seleccion de los asientos
-            // await recargarAsientos();
-            asientosSeleccionados.forEach(asiento => {
-                asiento.classList.remove('ring-8', 'ring-red-500');
-            });
-        } catch (error) {
-            console.error('Error al reservar los asientos:', error);
-            alert(error.message || 'Hubo un problema al realizar la reserva.');
-        }
+
+        alert('Asientos reservados con éxito!');
+        // Opcionalmente, podrías llamar a recargarAsientos() aquí si quieres actualizar toda la sala
+    } catch (error) {
+        console.error('Error al reservar los asientos:', error);
+        alert('Hubo un problema al reservar los asientos. Por favor, inténtalo de nuevo.');
+    }
     };
 
     // Evento para cuando se selecciona un asiento
@@ -106,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const asientoElement = e.target.closest('div');
         // Verificamos si se clickeo un asiento y no un espacio vacio
         if (!asientoElement || asientoElement.classList.contains('col-span-1')) return;
-        
+
         // Obtenemos la imagen del asiento
         const img = asientoElement.querySelector('img');
         // Verificamos si la imagen es una imagen de asiento disponible

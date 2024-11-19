@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sala de Cine</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="text-center bg-gray-800 text-white bg-cover bg-center" style="background-image: url('{{ asset('imagenes/f-spiderman.png') }}')">
 
@@ -56,7 +57,6 @@
     </div>
   </div>
 
-  <script src="{{ asset('js/cineprueba.js') }}"></script>
 
 
   <footer class="bg-gray-900 py-8 text-white mt-10">

@@ -6,19 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para reservar los asientos seleccionados
     const reservarAsientos = async () => {
-            const asientosSeleccionados = Array.from(asientosContainer.children)
-                .filter(child => child.classList.contains('ring-2'));
-            if (asientosSeleccionados.length === 0) {
-                alert('Por favor, selecciona al menos un asiento.');
-                return;
-            }
-            if (asientosSeleccionados.length > 10) {
-                const cantidadMaxima = 10;
-                const asientosParaQuitar = asientosSeleccionados.length - cantidadMaxima;
-                asientosSeleccionados.slice(-asientosParaQuitar).forEach(asiento => asiento.classList.remove('ring-2', 'ring-yellow-500'));
-                alert(`Solo puedes seleccionar hasta ${cantidadMaxima} asientos a la vez.`);
-                return;
-            }
+        const asientosSeleccionados = Array.from(asientosContainer.children)
+            .filter(child => child.classList.contains('ring-8'));
+        if (asientosSeleccionados.length === 0) {
+            alert('Por favor, selecciona al menos un asiento.');
+            return;
+        }
+        if (asientosSeleccionados.length > 10) {
+            const cantidadMaxima = 10;
+            const asientosParaQuitar = asientosSeleccionados.length - cantidadMaxima;
+            asientosSeleccionados.slice(-asientosParaQuitar).forEach(asiento => asiento.classList.remove('ring-8', 'ring-yellow-500'));
+            alert(`Solo puedes seleccionar hasta ${cantidadMaxima} asientos a la vez.`);
+            return;
+        }
 
         const ids = asientosSeleccionados.map(asiento => parseInt(asiento.textContent.trim()));
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(result.mensaje);
                 await recargarAsientos();
                 asientosSeleccionados.forEach(asiento => {
-                    asiento.classList.remove('ring-2', 'ring-yellow-500');
+                    asiento.classList.remove('ring-8', 'ring-yellow-500');
                 });
             } else if (result.error) {
                 alert(result.error);
@@ -56,17 +56,79 @@ document.addEventListener('DOMContentLoaded', () => {
         const img = asientoElement.querySelector('img');
         if (!img || img.src.includes('asientoocupado.png')) return;
 
-        // Deseleccionar asiento anterior si existe
-        const asientoSeleccionadoPrevio = asientosContainer.querySelector('.ring-2');
-        if (asientoSeleccionadoPrevio) {
-            asientoSeleccionadoPrevio.classList.remove('ring-2', 'ring-yellow-500');
-        }
+        const asientosSeleccionados = Array.from(asientosContainer.children)
+            .filter(child => child.classList.contains('ring-8'));
 
-        // Seleccionar nuevo asiento
-        asientoElement.classList.add('ring-2', 'ring-yellow-500');
+        if (asientosSeleccionados.length < 10) {
+            asientoElement.classList.toggle('ring-8', 'ring-yellow-500');
+        } else {
+            alert('Solo puedes seleccionar hasta 10 asientos a la vez.');
+        }
     });
 
     // Event listeners para los botones
     reservarButton.addEventListener('click', reservarAsientos);
 
+    // Función para crear un nuevo asiento
+    const crearAsiento = async () => {
+        const response = await fetch('/asientos/crear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ fila: 1, columna: 1 })
+        });
+
+        const result = await response.json();
+
+        if (result.mensaje) {
+            alert(result.mensaje);
+            await recargarAsientos();
+        } else if (result.error) {
+            alert(result.error);
+        }
+    };
+
+    // Event listener para el botón de crear asiento
+    crearButton.addEventListener('click', crearAsiento);
+
+    // Función para eliminar un asiento
+    const eliminarAsiento = async () => {
+        const asientoSeleccionado = asientosContainer.querySelector('.ring-8');
+        if (!asientoSeleccionado) {
+            alert('Por favor, selecciona un asiento para eliminar.');
+            return;
+        }
+
+        const img = asientoSeleccionado.querySelector('img');
+        if (!img || !img.src.includes('asiento.png')) {
+            alert('Solo puedes eliminar asientos que no estan disponibles.');
+            return;
+        }
+
+        const id = parseInt(asientoSeleccionado.textContent.trim());
+
+        try {
+            const response = await fetch(`/asientos/eliminar/${id}`, {
+                method: 'DELETE',
+            });
+
+            const result = await response.json();
+
+            if (result.mensaje) {
+                alert(result.mensaje);
+                await recargarAsientos();
+                asientoSeleccionado.classList.remove('ring-8', 'ring-yellow-500');
+            } else if (result.error) {
+                alert(result.error);
+            }
+        } catch (error) {
+            console.error('Error al eliminar el asiento:', error);
+            alert('Hubo un problema al eliminar el asiento.');
+        }
+    };
+
+    // Event listener para el botón de eliminar asiento
+    eliminarButton.addEventListener('click', eliminarAsiento);
 });
+

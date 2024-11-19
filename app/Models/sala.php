@@ -17,8 +17,5 @@ class sala extends Model
         'nombre',
     ];
 
-    function asientos(){
-        return $this->hasMany
-        (asientos::class, 'salas_id');
-    }
+    
 }

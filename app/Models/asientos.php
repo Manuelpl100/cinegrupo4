@@ -18,7 +18,5 @@ class asientos extends Model
         'id_sala'
     ];
 
-    function sala(){
-        return $this->belongsTo(Sala::class, 'salas_id');}
 
 }

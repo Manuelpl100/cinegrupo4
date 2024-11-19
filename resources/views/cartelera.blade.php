@@ -6,6 +6,7 @@
   <title>Cartelera de Cine</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <header class="bg-gray-900 py-4 shadow-md">
   <div class="container mx-auto flex justify-center items-center px-6">
     <h1 class="text-5xl font-extralight text-white">CINE CAMPEONES</h1>
@@ -33,7 +34,6 @@
       </div>
     </div>
 
-    <!-- Batman -->
     <div class="bg-gray-900 rounded-lg shadow-lg overflow-hidden flex">
       <img class="h-72 w-auto object-cover" src="{{ asset('imagenes/batmancartelera.png') }}" alt="Batman">
       <div class="p-4 flex-1">
@@ -51,7 +51,7 @@
     </div>
   </div>
 
-  <footer class="bg-gray-900 py-8 mt-44 text-white">
+  <footer class="bg-gray-900 py-8 mt-44 text-white ml-auto">
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 ml-10">
       <div>
         <h2 class="text-2xl font-bold mb-4">Cine Campeones</h2>
@@ -60,7 +60,7 @@
       </div>
       <div>
         <h2 class="text-2xl font-bold mb-4">Contacto</h2>
-        <p class="text-gray-400">Teléfono: <span class="text-white">+34 666 66 66</span></p>
+        <p class="text-gray-400">Teléfono: <span class="text-white">+34 645 56 45 23</span></p>
         <p class="text-gray-400">Correo: <a href="mailto:info@cinecampeones.com" class="text-blue-400 hover:underline">info@cinecampeones.com</a></p>
       </div>
       <div>

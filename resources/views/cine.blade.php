@@ -42,16 +42,18 @@
     @endfor
   </div>
 
-  <div class="mt-12 mx-auto max-w-lg">
-    <button id="reservar" class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-      Reservar
-    </button>
-    <button id="crear" class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-      crear asiento
-    </button>
-    <button id="eliminar" class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-      eliminar asiento
-    </button>
+  <div class="mt-12 mx-auto max-w-lg flex justify-center items-center">
+    <div class="flex space-x-4 justify-center">
+      <button id="reservar" class="py-2 px-6 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+        Reservar
+      </button>
+      <button id="crear" class="py-2 px-6 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+        Crear asiento
+      </button>
+      <button id="eliminar" class="py-2 px-6 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+        Eliminar asiento
+      </button>
+    </div>
   </div>
 
   <script src="{{ asset('js/cineprueba.js') }}"></script>

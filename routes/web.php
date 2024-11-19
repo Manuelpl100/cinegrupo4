@@ -23,7 +23,6 @@ Route::get('/sala/{id}', function ($id) {
 
 //visualizaciones de los metodos de los controler de Diego
 Route::get('/sala/{id}/asientos', [AsientoController::class, 'index'])->name('asientos.index');
-Route::post('/sala/{id}/asientos/reservar/{id_asiento?}', [AsientoController::class, 'reservar'])->where('id_asiento', '\d+')->name('asientos.reservar');
+Route::get('/sala/{id}/asientos/reservar/{id_asiento}', [AsientoController::class, 'reservar'])->name('asientos.reservar');
 Route::get('/sala/{id}/asientos/aleatorio', [AsientoController::class, 'buscarAsientoDisponibleAleatorio'])->name('asientos.aleatorio');
 Route::get('/sala/{id}/asientos/ocupados', [AsientoController::class, 'contarAsientosOcupados'])->name('asientos.ocupados');
-

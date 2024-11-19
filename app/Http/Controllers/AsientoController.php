@@ -64,14 +64,15 @@ class AsientoController extends Controller
             return response()->json(['error' => 'No existen asientos para esa sala'], 404);
         }
 
-        $resultado = $asientos->map(function ($asiento) {
+        $asientirijillo = $asientos->map(function ($asiento) {
             return [
                 'id' => $asiento->id,
                 'imagen' => $asiento->disponibilidad ? 'asientodisponible.png' : 'asientoocupado.png',
             ];
         });
 
-        return response()->json(['asientos' => $resultado]);
+        return view('cine', ['asientirijillo' => $asientirijillo]);
     }
+
 
 }

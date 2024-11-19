@@ -26,23 +26,39 @@
     <img class="h-72 w-auto mx-auto mt-6 rounded-3xl" src="{{ asset('./imagenes/s.png') }}" alt="">
   </div>
 
-  <div id="guardar" class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
-    @for ($row = 0; $row < 7; $row++)
-      @for ($col = 0; $col < 5; $col++)
-        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-transparent">
-          <img src="{{ asset(App\Models\asientos::where('id_sala', 1)->where('id', $row * 10 + $col + 1)->first()->disponibilidad ? './imagenes/asientodisponible.png' : './imagenes/asientoocupado.png') }}" alt="Asiento" class="w-full h-full object-contain">
-          {{ $row * 10 + $col + 1 }}
-        </div>
-      @endfor
-      <div class="col-span-1"></div>
-      @for ($col = 5; $col < 10; $col++)
-        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-transparent">
-          <img src="{{ asset(App\Models\asientos::where('id_sala', 1)->where('id', $row * 10 + $col + 1)->first()->disponibilidad ? './imagenes/asientodisponible.png' : './imagenes/asientoocupado.png') }}" alt="Asiento" class="w-full h-full object-contain">
-          {{ $row * 10 + $col + 1 }}
-        </div>
-      @endfor
-    @endfor
-  </div>
+
+  <div class="mt-12 mx-auto max-w-4xl">
+    <div class="text-lg font-bold mb-4">Asientos</div>
+
+    <div class="space-y-4">
+        @foreach ($asientirijillo->chunk(10) as $fila) {{-- Dividimos los asientos en grupos de 10 para cada fila --}}
+            <div class="flex justify-center space-x-8">
+                {{-- Lado izquierdo: 5 asientos --}}
+                <div class="grid grid-cols-5 gap-2">
+                    @foreach ($fila->take(5) as $asiento) {{-- Tomamos los primeros 5 asientos --}}
+                        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
+                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="Asiento" class="w-full h-full object-contain">
+                        </div>
+                    @endforeach
+                </div>
+
+                {{-- Pasillo central --}}
+                <div class="w-8"></div>
+
+                {{-- Lado derecho: 5 asientos --}}
+                <div class="grid grid-cols-5 gap-2">
+                    @foreach ($fila->slice(5) as $asiento) {{-- Tomamos los 5 asientos restantes --}}
+                        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
+                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="Asiento" class="w-full h-full object-contain">
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+
 
   <div class="mt-12 mx-auto max-w-lg flex justify-center items-center">
     <div class="flex space-x-4 justify-center">
@@ -87,4 +103,5 @@
 
 </body>
 </html>
+
 

@@ -16,4 +16,6 @@ class sala extends Model
     protected $fillable = [
         'nombre',
     ];
+
+    
 }

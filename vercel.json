@@ -25,8 +25,8 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "https://github.com/Manuelpl100/cinegrupo4",
-        "APP_KEY": "base64:2OkX79o/91g2CO2ycvkZOmyueFK3JhWx1KRRETd5l2Q=",
+        "APP_URL": "https://proyecto4.vercel.app",
+        "APP_KEY": "base64:SYUrZ9RV4KsE3dRFiG87YZ+pUHuvhrg4tmqTC6+x0P0=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",

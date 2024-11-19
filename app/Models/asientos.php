@@ -18,4 +18,5 @@ class asientos extends Model
         'id_sala'
     ];
 
+
 }

@@ -72,11 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Iteramos sobre cada asiento para reservarlos individualmente
             for (const id_asiento of id_asientos) {
                 // Hacemos una peticion HTTP para reservar cada asiento
-                const response = await fetch(`/api/asientos/${id_asiento}/reservar`, {
+
+                const response = await fetch(`/sala/{salaId}/asientos/reservar/{asiento}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
                     }
                 });
 

@@ -1,88 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const asientosContainer = document.querySelector('.grid');
-    const reservarButton = document.querySelector('#reservar-button');
-    let asientosData = [];
-    let salaId = 1; // Cambiar si es necesario obtener dinámicamente la sala.
-
-    // Función para cargar los asientos de la sala
-    const cargarAsientos = async () => {
-        try {
-            const response = await fetch(`/api/v1/salas/${salaId}/asientos`);
-            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-            
-            const data = await response.json();
-            asientosData = data.asientos || [];
-            actualizarVistaAsientos();
-        } catch (error) {
-            console.error('Error al cargar los asientos:', error);
-            alert('Hubo un problema al cargar los asientos.');
-        }
-    };
-
-    // Función para actualizar la vista de los asientos
-    const actualizarVistaAsientos = () => {
-        if (!asientosContainer) {
-            console.error('El contenedor de asientos no existe en el DOM.');
-            return;
-        }
-
-        asientosContainer.innerHTML = ''; // Limpiar los asientos anteriores
-        asientosData.forEach((asiento, index) => {
-            const asientoElement = document.createElement('div');
-            asientoElement.dataset.index = index;
-            asientoElement.dataset.id = asiento.id;
-            asientoElement.className = `w-10 h-10 rounded flex items-center justify-center cursor-pointer 
-                ${asiento.disponibilidad ? 'bg-black hover:bg-green-500' : 'bg-red-500 cursor-not-allowed'}`;
-            asientosContainer.appendChild(asientoElement);
-        });
-    };
+    const asientosContainer = document.querySelector('#guardar');
+    const reservarButton = document.querySelector('#reservar');
+    const crearButton = document.querySelector('#crear');
+    const eliminarButton = document.querySelector('#eliminar');
 
     // Función para reservar los asientos seleccionados
     const reservarAsientos = async () => {
-        const seleccionados = Array.from(asientosContainer.querySelectorAll('.ring-2'))
-            .map(el => el.dataset.id);
-
-        if (!seleccionados.length) {
-            alert('Selecciona al menos un asiento.');
-            return;
-        }
-
-        try {
-            const response = await fetch(`/api/v1/salas/${salaId}/reservar`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ids: seleccionados }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Error desconocido');
+            const asientosSeleccionados = Array.from(asientosContainer.children)
+                .filter(child => child.classList.contains('ring-2'));
+            if (asientosSeleccionados.length === 0) {
+                alert('Por favor, selecciona al menos un asiento.');
+                return;
+            }
+            if (asientosSeleccionados.length > 10) {
+                const cantidadMaxima = 10;
+                const asientosParaQuitar = asientosSeleccionados.length - cantidadMaxima;
+                asientosSeleccionados.slice(-asientosParaQuitar).forEach(asiento => asiento.classList.remove('ring-2', 'ring-yellow-500'));
+                alert(`Solo puedes seleccionar hasta ${cantidadMaxima} asientos a la vez.`);
+                return;
             }
 
-            alert('Reserva realizada con éxito.');
-            await cargarAsientos();
+        const ids = asientosSeleccionados.map(asiento => parseInt(asiento.textContent.trim()));
+
+        try {
+            const response = await fetch('/asientos/reservar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ids })
+            });
+
+            const result = await response.json();
+
+            if (result.mensaje) {
+                alert(result.mensaje);
+                await recargarAsientos();
+                asientosSeleccionados.forEach(asiento => {
+                    asiento.classList.remove('ring-2', 'ring-yellow-500');
+                });
+            } else if (result.error) {
+                alert(result.error);
+            }
         } catch (error) {
             console.error('Error al reservar los asientos:', error);
-            alert('No se pudieron reservar los asientos.');
+            alert('Hubo un problema al realizar la reserva.');
         }
     };
 
-    // Manejo de selección de asientos
+    // Evento de selección de asientos
     asientosContainer.addEventListener('click', (e) => {
-        const asientoElement = e.target.closest('div[data-index]');
-        if (!asientoElement || asientoElement.classList.contains('cursor-not-allowed')) return;
+        const asientoElement = e.target.closest('div');
+        if (!asientoElement || asientoElement.classList.contains('col-span-1')) return;
+        
+        const img = asientoElement.querySelector('img');
+        if (!img || img.src.includes('asientoocupado.png')) return;
 
-        asientoElement.classList.toggle('ring-2');
-        asientoElement.classList.toggle('ring-yellow-500');
+        // Deseleccionar asiento anterior si existe
+        const asientoSeleccionadoPrevio = asientosContainer.querySelector('.ring-2');
+        if (asientoSeleccionadoPrevio) {
+            asientoSeleccionadoPrevio.classList.remove('ring-2', 'ring-yellow-500');
+        }
+
+        // Seleccionar nuevo asiento
+        asientoElement.classList.add('ring-2', 'ring-yellow-500');
     });
 
-    // Lógica del botón "Reservar"
-    if (reservarButton) {
-        reservarButton.addEventListener('click', reservarAsientos);
-    } else {
-        console.error('No se encontró el botón de reserva en el DOM.');
-    }
+    // Event listeners para los botones
+    reservarButton.addEventListener('click', reservarAsientos);
 
-    // Cargar asientos al inicializar la página
-    cargarAsientos();
 });

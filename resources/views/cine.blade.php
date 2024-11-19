@@ -43,13 +43,13 @@
   </div>
 
   <div class="mt-12 mx-auto max-w-lg">
-    <button class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+    <button id="reservar" class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
       Reservar
     </button>
-    <button class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+    <button id="crear" class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
       crear asiento
     </button>
-    <button class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+    <button id="eliminar" class="w-full py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
       eliminar asiento
     </button>
   </div>

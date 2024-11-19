@@ -18,28 +18,23 @@ class AsientoController extends Controller
 
     public function reservar(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id_asiento' => 'required|array',
-            'id_asiento.*' => 'integer|exists:asientos,id',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 422);
-        }
-
         $id_sala = $request->route('id');
         $id_asientos = $request->input('id_asiento');
 
-        $asientos = asientos::whereIn('id', $id_asientos)->where('id_sala', $id_sala)->get();
+        $asientos = asientos::select('id', 'disponibilidad')
+            ->whereIn('id', $id_asientos)
+            ->where('id_sala', $id_sala)
+            ->where('disponibilidad', true)
+            ->get();
 
-        if ($asientos->where('disponibilidad', false)->count()) {
-            return response()->json(['error' => 'Uno o más asientos no están disponibles'], 422);
+        if ($asientos->count() !== count($id_asientos)) {
+            return response()->json(['error' => 'Uno o más asientos no están disponibles o exceden el límite permitido'], 422);
         }
 
-        foreach ($asientos as $asiento) {
+        $asientos->each(function ($asiento) {
             $asiento->disponibilidad = false;
             $asiento->save();
-        }
+        });
 
         return response()->json(['mensaje' => 'Asiento(s) reservado(s) con éxito']);
     }

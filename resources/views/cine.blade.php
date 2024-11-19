@@ -14,7 +14,8 @@
       <h1 class="text-xl font-bold text-white">Sala de Cine</h1>
       <nav>
         <ul class="flex space-x-4">
-          <li><a href="" class="text-gray-300 hover:text-white">Cartelera</a></li>
+          <li><a href="{{ url('cartelera') }}" class="text-gray-300 hover:text-white">Cartelera</a>
+          </li>
         </ul>
       </nav>
     </div>

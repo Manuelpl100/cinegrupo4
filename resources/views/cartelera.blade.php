@@ -28,7 +28,7 @@
         <div class="mt-2 text-yellow-400">
           ⭐⭐⭐⭐☆ (4.5/5)
         </div>
-        <button onclick="window.location.href='./sala/1'" class="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-lg">
+        <button onclick="window.location.href='./sala/1/asientos/mostrar'" class="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-lg">
           Ver peli
         </button>
       </div>

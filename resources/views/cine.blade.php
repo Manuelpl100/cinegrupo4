@@ -30,7 +30,7 @@
   <div class="mt-12 mx-auto max-w-4xl">
     <div class="text-lg font-bold mb-4">Asientos</div>
 
-    <div class="space-y-4">
+    <div id="asientosSala" class="space-y-4">
         @foreach ($asientirijillo->chunk(10) as $fila)
             <div class="flex justify-center space-x-8">
                 {{-- Lado izquierdo: 5 asientos --}}

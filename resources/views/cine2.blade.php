@@ -25,7 +25,7 @@
     <img class="h-72 w-auto mx-auto mt-6 rounded-3xl" src="{{ asset('./imagenes/batman.png') }}" alt="Batman">
   </div>
 
-  <div class="space-y-4">
+  <div id="asientosSala" class="space-y-4">
 
     @foreach ($asientirijillo->whereBetween('id', [71, 140])->chunk(10) as $fila)
         <div class="flex justify-center space-x-8">

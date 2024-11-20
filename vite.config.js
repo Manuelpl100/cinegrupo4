@@ -10,8 +10,11 @@
 //     ],
 // });
 
-export default {
-    build: {
-      outDir: 'dist', // Esta es la carpeta donde se generarán los archivos compilados
-    },
-  }
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  root: './api/index.php', // Asegúrate de que este valor apunta al directorio donde está `index.html`
+  build: {
+    outDir: 'dist', // Directorio de salida
+  },
+});

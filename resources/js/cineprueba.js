@@ -15,9 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para actualizar la imagen del asiento según su disponibilidad
     function cambioImagen(elemento, asientoLibre) {
         // Cambia la imagen del asiento a disponible u ocupado según el estado
-        elemento.querySelector('img').src = asientoLibre
-            ? '/imagenes/asientodisponible.png'
-            : '/imagenes/asientoocupado.png';
+        if (asientoLibre) {
+            elemento.querySelector('img').src = '/imagenes/asientodisponible.png';
+        } else {
+            elemento.querySelector('img').src = '/imagenes/asientoocupado.png';
+        }
     }
 
     // Añade un evento de clic para seleccionar un asiento

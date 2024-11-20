@@ -65,12 +65,7 @@
       <button id="reservar" class="py-2 px-6 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
         Reservar
       </button>
-      <button id="crear" class="py-2 px-6 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-        Crear asiento
-      </button>
-      <button id="eliminar" class="py-2 px-6 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-        Eliminar asiento
-      </button>
+      
     </div>
   </div>
 

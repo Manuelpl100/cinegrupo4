@@ -71,7 +71,13 @@ class AsientoController extends Controller
             ];
         });
 
-        return view('cine', ['asientirijillo' => $asientirijillo]);
+        if ($id_sala == 1) {
+            return view('cine', ['asientirijillo' => $asientirijillo]);
+        } elseif ($id_sala == 2) {
+            return view('cine2', ['asientirijillo' => $asientirijillo]);
+        } else {
+            return redirect()->route('cartelera.index');
+        }
     }
 
 

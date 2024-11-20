@@ -27,36 +27,35 @@
   </div>
 
 
-  <div class="mt-12 mx-auto max-w-4xl">
-    <div class="text-lg font-bold mb-4">Asientos</div>
+  <div class="space-y-4">
 
-    <div class="space-y-4">
-        @foreach ($asientirijillo->chunk(10) as $fila)
-            <div class="flex justify-center space-x-8">
-                {{-- Lado izquierdo: 5 asientos --}}
-                <div class="grid grid-cols-5 gap-2">
-                    @foreach ($fila->take(5) as $asiento)
-                        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
-                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
-                        </div>
-                    @endforeach
-                </div>
+    @foreach ($asientirijillo->whereBetween('id', [0, 70])->chunk(10) as $fila)
+        <div class="flex justify-center space-x-8">
 
-                {{-- Pasillo central --}}
-                <div class="w-8"></div>
-
-                {{-- Lado derecho: 5 asientos --}}
-                <div class="grid grid-cols-5 gap-2">
-                    @foreach ($fila->slice(5) as $asiento)
-                        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
-                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
-                        </div>
-                    @endforeach
-                </div>
+            <div class="grid grid-cols-5 gap-2">
+                @foreach ($fila->take(5) as $asiento)
+                    <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
+                        <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
+
+
+            <div class="w-8"></div>
+
+
+            <div class="grid grid-cols-5 gap-2">
+                @foreach ($fila->slice(5) as $asiento)
+                    <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
+                        <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endforeach
 </div>
+
+
 
 
 

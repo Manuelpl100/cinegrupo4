@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sala de Cine</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/cineprueba.js'])
 </head>
 <body class="text-center bg-gray-800 text-white bg-cover bg-center" style="background-image: url('{{ asset('imagenes/f-batman.png') }}')">
 
@@ -13,32 +14,42 @@
       <h1 class="text-xl font-bold text-white">Sala de Cine</h1>
       <nav>
         <ul class="flex space-x-4">
-          <li><li><a href="{{ url('cartelera') }}" class="text-gray-300 hover:text-white">Cartelera</a></li>
+          <li><a href="{{ url('cartelera') }}" class="text-gray-300 hover:text-white">Cartelera</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <div class="text-center mx-auto max-w-screen-lg">
-    <img class="h-72 w-auto mx-auto mt-6 rounded-3xl" src="{{ asset('./imagenes/batman.png') }}" alt="">
+    <h1 class="text-2xl font-extrabold mt-8">BATMAN</h1>
+    <img class="h-72 w-auto mx-auto mt-6 rounded-3xl" src="{{ asset('./imagenes/batman.png') }}" alt="Batman">
   </div>
 
-  <div id="guardar" class="grid grid-cols-11 gap-2 mt-12 mx-auto max-w-2xl">
-    @for ($row = 0; $row < 7; $row++)
-      @for ($col = 0; $col < 5; $col++)
-        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-transparent">
-          <img src="{{ asset(App\Models\asientos::where('id_sala', 1)->where('id', $row * 10 + $col + 1)->first()->disponibilidad ? './imagenes/asientodisponible.png' : './imagenes/asientoocupado.png') }}" alt="Asiento" class="w-full h-full object-contain">
-          {{ $row * 10 + $col + 1 }}
+  <div class="space-y-4">
+
+    @foreach ($asientirijillo->whereBetween('id', [71, 140])->chunk(10) as $fila)
+        <div class="flex justify-center space-x-8">
+
+            <div class="grid grid-cols-5 gap-2">
+                @foreach ($fila->take(5) as $asiento)
+                    <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
+                        <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
+                    </div>
+                @endforeach
+            </div>
+
+
+            <div class="w-8"></div>
+
+            <div class="grid grid-cols-5 gap-2">
+                @foreach ($fila->slice(5) as $asiento)
+                    <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
+                        <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
+                    </div>
+                @endforeach
+            </div>
         </div>
-      @endfor
-      <div class="col-span-1"></div>
-      @for ($col = 5; $col < 10; $col++)
-        <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-transparent">
-          <img src="{{ asset(App\Models\asientos::where('id_sala', 1)->where('id', $row * 10 + $col + 1)->first()->disponibilidad ? './imagenes/asientodisponible.png' : './imagenes/asientoocupado.png') }}" alt="Asiento" class="w-full h-full object-contain">
-          {{ $row * 10 + $col + 1 }}
-        </div>
-      @endfor
-    @endfor
+    @endforeach
   </div>
 
   <div class="mt-12 mx-auto max-w-lg flex justify-center items-center">
@@ -54,10 +65,6 @@
       </button>
     </div>
   </div>
-  
-
-  <script src="{{ asset('js/cineprueba.js') }}"></script>
-
 
   <footer class="bg-gray-900 py-8 text-white mt-10">
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 ml-10">
@@ -68,8 +75,10 @@
       </div>
       <div>
         <h2 class="text-2xl font-bold mb-4">Contacto</h2>
-        <p class="text-gray-400"> Teléfono: <span class="text-white">+34 666 66 66 </span></p>
-        <p class="text-gray-400"> Correo: <a href="mailto:info@cinecampeones.com" class="text-blue-400 hover:underline">info@cinecampeones.com</a></p>
+        <p class="text-gray-400">Teléfono: <span class="text-white">+34 666 66 66</span></p>
+        <p class="text-gray-400">Correo:
+          <a href="mailto:info@cinecampeones.com" class="text-blue-400 hover:underline">info@cinecampeones.com</a>
+        </p>
       </div>
       <div>
         <h2 class="text-2xl font-bold mb-4">Sobre Nosotros</h2>
@@ -86,4 +95,3 @@
 
 </body>
 </html>
-

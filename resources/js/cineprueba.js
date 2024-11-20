@@ -1,94 +1,82 @@
-// Este archivo JavaScript se encarga de manejar la logica del frontend para la sala de cine.
-// Se ejecuta cuando se carga la pagina.
-document.addEventListener('DOMContentLoaded', () => {
-    // El contenedor de los asientos
+document.addEventListener('DOMContentLoaded', function() {
     const asientosContainer = document.querySelector('.space-y-4');
-    // El boton para reservar los asientos
-    const reservarButton = document.querySelector('#reservar');
-    // El boton para crear un nuevo asiento
-    const crearButton = document.querySelector('#crear');
-    // La identificacion de la sala en la que nos encontramos
-    const salaId = 1;
+    const reservarButton = document.getElementById('reservar');
+    let selectedSeat = null;
 
-    // Funcion para reservar los asientos seleccionados
-    const reservarAsientos = async (asientoSeleccionado) => {
-        if (!asientoSeleccionado || !(asientoSeleccionado instanceof HTMLElement) || !asientoSeleccionado.classList.contains('ring-8')) {
-            alert('Por favor, selecciona un asiento válido para reservar.');
+    // Función para actualizar la imagen del asiento
+    function updateSeatImage(seatElement, isAvailable) {
+        const imgElement = seatElement.querySelector('img');
+        if (imgElement) {
+            imgElement.src = isAvailable
+                ? '/imagenes/asientodisponible.png'
+                : '/imagenes/asientoocupado.png';
+        }
+    }
+
+    // Agregar evento de clic a cada asiento
+    document.querySelectorAll('.w-10.h-10').forEach(seat => {
+        seat.addEventListener('click', function(event) {
+            const imgElement = this.querySelector('img');
+            if (imgElement && imgElement.src.includes('asientodisponible.png')) {
+                // Deseleccionar el asiento previamente seleccionado
+                if (selectedSeat) {
+                    selectedSeat.classList.remove('ring-8', 'ring-yellow-500');
+                }
+                // Seleccionar el nuevo asiento
+                this.classList.add('ring-8', 'ring-yellow-500');
+                selectedSeat = this;
+                console.log('Asiento seleccionado:', imgElement.alt);
+            }
+        });
+    });
+
+    // Agregar evento de clic al botón de reservar
+    reservarButton.addEventListener('click', async function() {
+        if (!selectedSeat) {
+            alert('Por favor, selecciona un asiento antes de reservar');
             return;
         }
 
         try {
-            // Obtenemos el ID del asiento seleccionado
-            const imgElement = asientoSeleccionado.querySelector('img');
-            if (!imgElement) {
-                alert('Error: No se pudo encontrar la imagen del asiento.');
-                return;
-            }
+            const seatId = selectedSeat.querySelector('img').alt;
 
-            const asientoId = imgElement.getAttribute('alt');
+            console.log('Intentando reservar:', {
+                seatId,
+                url: `/public/asientos/reservar/${seatId}`
+            });
 
-            // Hacemos la petición para reservar el asiento
-            const response = await fetch(`/api/reservar`, {
-                method: 'POST',
+            // Llamar al endpoint de reserva con la ruta correcta incluyendo /public/
+            const response = await fetch(`/public/asientos/reservar/${seatId}`, {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                },
-                body: JSON.stringify({ id_asientos: [parseInt(asientoId)] }),
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Error en la reserva');
+                throw new Error(`Error HTTP! estado: ${response.status}`);
             }
 
-            const result = await response.json();
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
 
-            if (result.mensaje === 'Asiento reservado con exito') {
-                // Actualizamos la UI para mostrar el asiento como ocupado
-                imgElement.src = './imagenes/asientoocupado.png';
-                // Cambiamos el color del asiento a rojo
-                asientoSeleccionado.classList.remove('ring-8', 'ring-yellow-500');
-                asientoSeleccionado.classList.add('ring-red-500');
-                alert('Asiento reservado con éxito!');
-            } else {
-                console.error('Error al reservar asiento:', result.error);
+            if (data.mensaje) {
+                // Reserva exitosa
+                updateSeatImage(selectedSeat, false);
+                selectedSeat.classList.remove('ring-8', 'ring-yellow-500');
+                selectedSeat = null;
+                alert('Asiento reservado con éxito');
+
+                // Recargar la página para actualizar todos los asientos
+                window.location.reload();
+            } else if (data.error) {
+                alert(`Error: ${data.error}`);
+                console.error('Error detallado:', data.error_message);
             }
-
         } catch (error) {
-            console.error('Error al reservar el asiento:', error);
-            alert('Hubo un problema al reservar el asiento. Por favor, inténtalo de nuevo.');
+            console.error('Error:', error);
+            alert(`Error al realizar la reserva: ${error.message}`);
         }
-    };
-
-    // Evento para cuando se clickea un asiento y se presiona el botón de reservar
-    asientosContainer.addEventListener('click', (e) => {
-        const asientoSeleccionado = e.target.closest('.ring-8');
-        reservarButton.addEventListener('click', () => {
-            reservarAsientos(asientoSeleccionado);
-        });
     });
-
-    // Evento para cuando se selecciona un asiento
-    asientosContainer.addEventListener('click', (e) => {
-        // Obtenemos el elemento que se clickeo
-        const asientoElement = e.target.closest('div');
-
-        // Verificamos si se clickeo un asiento y no un espacio vacio
-        if (!asientoElement || asientoElement.classList.contains('space-y-4')) return;
-
-        // Obtenemos la imagen del asiento
-        const img = asientoElement.querySelector('img');
-        // Verificamos si la imagen es una imagen de asiento disponible
-        if (!img || img.src.includes('asientoocupado.png')) return;
-
-        // Le agregamos o quitamos la clase de seleccion al asiento
-        asientoElement.classList.toggle('ring-8');
-        asientoElement.classList.toggle('ring-yellow-500');
-    });
-
-    // Event listeners para los botones
-    reservarButton.addEventListener('click', reservarAsientos);
-
 });
-

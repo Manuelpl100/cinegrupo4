@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sala de Cine</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/cineprueba.js'])
 </head>
 <body class="text-center bg-gray-800 text-white bg-cover bg-center" style="background-image: url('{{ asset('imagenes/f-spiderman.png') }}')">
 
@@ -31,13 +31,13 @@
     <div class="text-lg font-bold mb-4">Asientos</div>
 
     <div class="space-y-4">
-        @foreach ($asientirijillo->chunk(10) as $fila) {{-- Dividimos los asientos en grupos de 10 para cada fila --}}
+        @foreach ($asientirijillo->chunk(10) as $fila)
             <div class="flex justify-center space-x-8">
                 {{-- Lado izquierdo: 5 asientos --}}
                 <div class="grid grid-cols-5 gap-2">
-                    @foreach ($fila->take(5) as $asiento) {{-- Tomamos los primeros 5 asientos --}}
+                    @foreach ($fila->take(5) as $asiento)
                         <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
-                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="Asiento" class="w-full h-full object-contain">
+                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
                         </div>
                     @endforeach
                 </div>
@@ -47,9 +47,9 @@
 
                 {{-- Lado derecho: 5 asientos --}}
                 <div class="grid grid-cols-5 gap-2">
-                    @foreach ($fila->slice(5) as $asiento) {{-- Tomamos los 5 asientos restantes --}}
+                    @foreach ($fila->slice(5) as $asiento)
                         <div class="w-10 h-10 bg-transparent flex items-center justify-center rounded cursor-pointer hover:bg-gray-700">
-                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="Asiento" class="w-full h-full object-contain">
+                            <img src="{{ asset('imagenes/' . $asiento['imagen']) }}" alt="{{ $asiento['id'] }}" class="w-full h-full object-contain">
                         </div>
                     @endforeach
                 </div>
@@ -103,5 +103,3 @@
 
 </body>
 </html>
-
-

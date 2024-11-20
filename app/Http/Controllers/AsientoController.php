@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\asientos;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-
 class AsientoController extends Controller
 {
     public function index(Request $request)
@@ -22,7 +20,7 @@ class AsientoController extends Controller
 
         if (!$asiento) {
             return response()->json(['error' => 'Asiento no encontrado',
-        'error_message' => 'melarepanflinfla'], 200);
+        'error_message' => 'no encontrado'], 200);
         }
 
         $asiento->disponibilidad = false;
